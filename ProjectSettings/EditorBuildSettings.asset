@@ -11,6 +11,24 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Pueblo.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/Bosque.unity
+    guid: 968e1539d782a37499b220e28d58293b
+  - enabled: 1
+    path: Assets/Scenes/Calabozo.unity
+    guid: b0ff3949ef3194744812135be6e90d7c
+  - enabled: 1
+    path: Assets/Scenes/InteriorCasa1.unity
+    guid: 68c06ea8815fb7b4bb6e4b36a754dc99
+  - enabled: 1
+    path: Assets/Scenes/InteriorCasa2.unity
+    guid: 3fd42a1b85d27be4d9278bf37be8af3c
+  - enabled: 1
+    path: Assets/Scenes/InteriorCasa3.unity
+    guid: d6cfc10a31f10fc478d50e0c62ac5e8f
+  - enabled: 1
+    path: Assets/Scenes/InteriorTaberna.unity
+    guid: 8e215f79043efdb42b512f5e27ccedee
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 8a7f6a7ba1d38304cb5e1ad3e0f33ba8, type: 3}
   m_UseUCBPForAssetBundles: 0
