@@ -1,64 +1,66 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class DoorInteraction : MonoBehaviour
 {
     [Header("Configuración de Escena")]
-    // Definimos explícitamente como int
     public int targetSceneIndex;
 
-    [Header("UI de Interacción")]
     public GameObject interactionText;
-
     private bool isPlayerNearby = false;
 
-    void Update()
-    {
-        // Verificamos la entrada del jugador
-        if (isPlayerNearby && Input.GetKeyDown(KeyCode.E))
-        {
-            ExecuteChange();
-        }
-    }
+    private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
+    private void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
 
-    private void ExecuteChange()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) => FindInteractionUI();
+
+    private void Start() => FindInteractionUI();
+
+    private void FindInteractionUI()
     {
-        // 1. Verificación de seguridad para evitar que el índice esté fuera de rango
-        if (targetSceneIndex >= 0 && targetSceneIndex < SceneManager.sceneCountInBuildSettings)
+        // Buscamos el objeto por Tag. FindWithTag sí encuentra objetos 
+        // sin importar su profundidad en la jerarquía.
+        interactionText = GameObject.FindWithTag("InteractionUI");
+
+        if (interactionText != null)
         {
-            // 2. Llamada al Singleton pasando el ENTERO
-            if (SceneTransition.instance != null)
-            {
-                // Aquí es donde ocurría el error. Nos aseguramos de pasar 'targetSceneIndex' (int)
-                SceneTransition.instance.ChangeScene(targetSceneIndex);
-            }
-            else
-            {
-                Debug.LogWarning("No se encontró el objeto SceneTransition en la escena. Cargando directamente...");
-                SceneManager.LoadScene(targetSceneIndex);
-            }
+            //interactionText.SetActive(false);
         }
         else
         {
-            Debug.LogError($"El índice {targetSceneIndex} no es válido. Revisa tus Build Settings.");
+            Debug.LogWarning("No se encontró ningún objeto con el Tag 'InteractionUI'.");
+        }
+    }
+
+    void Update()
+    {
+        if (isPlayerNearby && Input.GetKeyDown(KeyCode.E))
+        {
+            if (SceneTransition.instance != null)
+                SceneTransition.instance.ChangeScene(targetSceneIndex);
+            else
+                SceneManager.LoadScene(targetSceneIndex);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && interactionText != null)
         {
             isPlayerNearby = true;
-            if (interactionText != null) interactionText.SetActive(true);
+            interactionText.SetActive(true);
+            interactionText.GetComponent<TextMeshProUGUI>().text = "Presione E";
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && interactionText != null)
         {
+            interactionText.GetComponent<TextMeshProUGUI>().text = "";
             isPlayerNearby = false;
-            if (interactionText != null) interactionText.SetActive(false);
+            //interactionText.SetActive(false);
         }
     }
 }
